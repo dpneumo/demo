@@ -1,0 +1,23 @@
+upstream demo {
+    server  unix:/tmp/demo.sock;
+}
+
+server {
+    listen          80;
+    server_name     demo.com www.demo.com;
+
+    root            /var/www/demo/public;
+
+    access_log      /var/log/nginx/demo_access.log;
+    error_log       /var/log/nginx/demo_error.log;
+
+    location / {
+        proxy_set_header    X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header    Host $http_host;
+        proxy_redirect      off;
+
+        if ( !-f $request_filename ) {
+            proxy_pass          http://demo;
+        }
+    }
+}

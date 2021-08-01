@@ -1,0 +1,27 @@
+# https steps
+
+# register appropriate domains
+# eg. www.demo.com &/or demo.com
+
+# run:
+certbot --nginx
+certbot renew --dry-run
+
+# Confirm success:
+https://www.demo.com
+
+
+#======================================
+
+cd app_dir
+mkdir shared
+cd shared
+mkdir sockets log pids
+touch sockets/puma.sock
+touch log/puma.stdout.log log/puma.stderr.log
+touch pids/puma.pid pids/puma.state
+
+cd ../config
+now=$(date +"%F")
+mv puma.rb setup/puma.rb.${now}
+cp setup/puma-pipe.rb puma.rb
