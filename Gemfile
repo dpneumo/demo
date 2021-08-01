@@ -27,8 +27,8 @@ gem 'jbuilder', '~> 2.7'
 gem 'bootsnap', '>= 1.4.2', require: false
 
 group :production do
-  gem 'pg'
-  gem 'unicorn'
+  # gem 'pg'
+  gem 'sqlite3', '~> 1.4'
 end
 
 group :development, :test do

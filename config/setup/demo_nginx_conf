@@ -1,5 +1,5 @@
 upstream demo {
-    server  unix:/tmp/demo.sock;
+    server  unix://home/demo/demo/shared/sockets/puma.sock;
 }
 
 server {

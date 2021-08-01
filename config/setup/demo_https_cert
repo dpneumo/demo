@@ -13,7 +13,14 @@ https://www.demo.com
 
 #======================================
 
-cd app_dir
+# With demo app in github as origin
+export APP_NAME=demo
+
+adduser $APP_NAME
+cd /home/$APP_NAME
+git clone https://github.com/<github account>/$APP_NAME.git
+
+cd /home/$APP_NAME/$APP_NAME
 mkdir shared
 cd shared
 mkdir sockets log pids
@@ -25,3 +32,34 @@ cd ../config
 now=$(date +"%F")
 mv puma.rb setup/puma.rb.${now}
 cp setup/puma-pipe.rb puma.rb
+
+cp setup/demo_nginx_conf /etc/nginx/sites-available/$APP_NAME
+cd /etc/nginx/sites-enabled
+ln -s /etc/nginx/sites-available/$APP_NAME $APP_NAME
+
+chown demo:demo -R /home/demo/demo
+
+#=======================================
+# If not yet installed
+apt install nodejs npm
+npm install --global yarn
+
+
+ssh $APP_NAME@<droplet ip addr>
+
+rbenv install --list
+#choose the ruby desired
+rbenv install <desired ruby>
+rbenv global <desired ruby>
+rbenv local <desired ruby>
+
+cd $APP_NAME
+bundle install
+yarn install --check-files
+rails db:migrate
+
+# If needed
+#rails db:seed
+
+#Copy the master key into config/master.key
+nano config/master.key
